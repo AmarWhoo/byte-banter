@@ -27,14 +27,14 @@ clients = {}
 
 print(f'Listening for connections on {IP}:{PORT}...')
 
-# handles message receiving
-def receive_message(client_socket):
+# handles message receiving on server side
+def receive_msg_info(client_socket):
     try:
 
-        # receive our "header" containing message length, it's size is defined and constant
+        # receive "header" containing message length, it's size is defined and constant
         message_header = client_socket.recv(HEADER_LENGTH)
 
-        # if we received no data, client gracefully closed a connection,
+        # if no data was received, client gracefully closed the connection
         if not len(message_header):
             return False
 
@@ -59,7 +59,7 @@ while True:
 
                 # accept new connection
                 client_socket, client_address = server_socket.accept()
-                user = receive_message(client_socket)
+                user = receive_msg_info(client_socket)
 
                 # if False - client disconnected before he sent his name
                 if user is False:
@@ -77,7 +77,7 @@ while True:
             else:
 
                 # receive message
-                message = receive_message(notified_socket)
+                message = receive_msg_info(notified_socket)
 
                 # if False, client disconnected, cleanup
                 if message is False:
